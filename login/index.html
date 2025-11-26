@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | POTRAZ Telecom GIS</title>
+    <link rel="stylesheet" href="login.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="loginContainer">
+        <!-- Left Panel - Login Form -->
+        <div class="loginPanel">
+            <div class="loginPanel__content">
+                <!-- Dark Mode Toggle -->
+                <div class="themeToggleContainer">
+                    <label class="darkModeToggle" title="Toggle dark/light mode">
+                        <input type="checkbox" id="darkModeToggle">
+                        <span class="darkModeToggle__slider"></span>
+                    </label>
+                </div>
+
+                <!-- Heading -->
+                <div class="loginPanel__header">
+                    <h1>Log in to your account</h1>
+                    <p>Please enter your details</p>
+                </div>
+
+                <!-- Login Form -->
+                <form class="loginForm" id="loginForm">
+                    <!-- Email Field -->
+                    <div class="loginForm__group">
+                        <label for="email">Email</label>
+                        <div class="loginForm__inputWrapper">
+                            <i class="fa-regular fa-envelope"></i>
+                            <input
+                                type="email"
+                                id="email"
+                                name="email"
+                                placeholder="Enter your email"
+                                required
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Password Field -->
+                    <div class="loginForm__group">
+                        <label for="password">Password</label>
+                        <div class="loginForm__inputWrapper">
+                            <i class="fa-solid fa-lock"></i>
+                            <input
+                                type="password"
+                                id="password"
+                                name="password"
+                                placeholder="Enter your password"
+                                required
+                            >
+                            <button type="button" class="loginForm__togglePassword" id="togglePassword">
+                                <i class="fa-regular fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Options Row -->
+                    <div class="loginForm__options">
+                        <label class="loginForm__checkbox">
+                            <input type="checkbox" id="remember" name="remember">
+                            <span class="checkmark"></span>
+                            Remember for 30 days
+                        </label>
+                        <a href="forgot-password.html" class="loginForm__forgotLink">Forgot password</a>
+                    </div>
+
+                    <!-- Login Button -->
+                    <button type="submit" class="loginForm__submit" id="submitBtn">
+                        <span class="loginForm__submit-content">
+                            <i class="fa-solid fa-lock"></i>
+                            Log in
+                        </span>
+                        <span class="loginForm__submit-loader"></span>
+                    </button>
+                </form>
+
+                <!-- Footer -->
+                <div class="loginPanel__footer">
+                    <p>By creating an account, you agree to our <a href="#">Terms of Use</a></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Panel - Marketing -->
+        <div class="marketingPanel">
+            <div class="marketingPanel__content">
+                <!-- Logo -->
+                <div class="marketingPanel__logo">
+                    <img src="assets/potraz-logo.png" alt="POTRAZ">
+                </div>
+
+                <!-- Tagline -->
+                <h2 class="marketingPanel__tagline">Creating a level playing field</h2>
+
+                <!-- Mockup Image -->
+                <div class="marketingPanel__mockup">
+                    <img src="assets/mockupRight.png" alt="POTRAZ Telecom GIS Dashboard">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Password visibility toggle
+        const togglePassword = document.getElementById('togglePassword');
+        const passwordInput = document.getElementById('password');
+
+        togglePassword.addEventListener('click', function() {
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+
+            // Toggle icon
+            const icon = this.querySelector('i');
+            icon.classList.toggle('fa-eye');
+            icon.classList.toggle('fa-eye-slash');
+        });
+
+        // Form submission
+        const loginForm = document.getElementById('loginForm');
+        const submitBtn = document.getElementById('submitBtn');
+
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Add loading state
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+
+            // Simulate loading and redirect
+            setTimeout(() => {
+                window.location.href = '../GIS/index.html';
+            }, 1500);
+        });
+
+        // ==========================================
+        // DARK MODE TOGGLE FUNCTIONALITY
+        // ==========================================
+        const darkModeToggle = document.getElementById('darkModeToggle');
+
+        if (darkModeToggle) {
+            // Toggle event listener
+            darkModeToggle.addEventListener('change', function() {
+                if (this.checked) {
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                } else {
+                    document.body.classList.remove('dark-mode');
+                    localStorage.setItem('darkMode', 'disabled');
+                }
+            });
+
+            // Check for saved preference on page load
+            const savedDarkMode = localStorage.getItem('darkMode');
+
+            // Default to light mode if no preference saved
+            if (savedDarkMode === 'enabled') {
+                darkModeToggle.checked = true;
+                document.body.classList.add('dark-mode');
+            } else if (savedDarkMode === null) {
+                // First visit - check system preference
+                const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (prefersDark) {
+                    darkModeToggle.checked = true;
+                    document.body.classList.add('dark-mode');
+                    localStorage.setItem('darkMode', 'enabled');
+                }
+            }
+        }
+    </script>
+</body>
+</html>

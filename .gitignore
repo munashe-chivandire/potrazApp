@@ -1,0 +1,9 @@
+# Claude Code configuration and project files
+.claude/
+.factory/
+CLAUDE.md
+claude.md
+
+# Ignore all CLAUDE.md files in subdirectories
+**/CLAUDE.md
+**/claude.md
