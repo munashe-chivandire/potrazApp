@@ -1,0 +1,918 @@
+// POTRAZ Landing Page Styles
+// ===========================
+
+// ==========================================
+// VARIABLES
+// ==========================================
+
+// Light Mode Colors
+$primary-blue: #2d74df;
+$primary-dark: #1a5cc4;
+$secondary-blue: #5a94e8;
+$text-dark: #333;
+$text-muted: #6b7280;
+$border-color: #e5e7eb;
+$bg-light: #f9fafb;
+$white: #ffffff;
+
+// Dark Mode Colors
+$dark-bg-primary: #0f0f1a;
+$dark-bg-secondary: #1a1a2e;
+$dark-bg-tertiary: #16213e;
+$dark-bg-hover: #1e2a4a;
+$dark-text-primary: #e0e6f0;
+$dark-text-secondary: #8892a8;
+$dark-border: #2a3a5a;
+$dark-link: #5a94e8;
+
+// ==========================================
+// RESET & BASE
+// ==========================================
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+    color: $text-dark;
+    overflow-x: hidden;
+}
+
+// ==========================================
+// LOADER
+// ==========================================
+.loaderWrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: $dark-bg-primary;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 100000;
+}
+
+.circleLoader {
+    display: flex;
+    gap: 1rem;
+
+    .circle {
+        width: 1rem;
+        height: 1rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #4E2641 0%, $primary-blue 100%);
+        box-shadow: 0 0 20px rgba($primary-blue, 0.5);
+    }
+}
+
+// ==========================================
+// BACKGROUND OVERLAY
+// ==========================================
+.backgroundOverlay {
+    display: none; // Removed background image
+}
+
+// ==========================================
+// LANDING CONTAINER
+// ==========================================
+.landingContainer {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem 2rem 4rem;
+    position: relative;
+    z-index: 1;
+}
+
+// ==========================================
+// HEADER
+// ==========================================
+.landingHeader {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 3rem;
+    padding: 1rem 0;
+    position: relative;
+    z-index: 100;
+
+    &__left {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+    }
+
+    &__logo {
+        width: 80px;
+        height: 80px;
+        background: $white;
+        border-radius: 16px;
+        padding: 0.5rem;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+    }
+
+    &__text {
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: $text-dark;
+            margin-bottom: 0.25rem;
+        }
+
+        p {
+            font-size: 0.95rem;
+            color: $text-muted;
+        }
+    }
+}
+
+// ==========================================
+// USER AVATAR DROPDOWN
+// ==========================================
+.userAvatarContainer {
+    position: relative;
+    z-index: 10000;
+}
+
+.userAvatarBtn {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem 1rem 0.5rem 0.5rem;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 50px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+
+        .userAvatarBtn__chevron {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__avatar {
+        height: 2.5rem;
+        width: 2.5rem;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2d74df 0%, #1e5bb8 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    &__initials {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: #ffffff;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    &__info {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 0.1rem;
+    }
+
+    &__name {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: $dark-text-primary;
+        line-height: 1.2;
+    }
+
+    &__role {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: $dark-text-secondary;
+        line-height: 1.2;
+    }
+
+    &__chevron {
+        font-size: 0.7rem;
+        color: $dark-text-secondary;
+        transition: transform 0.3s ease;
+        margin-left: 0.25rem;
+    }
+
+    &.open {
+        background: rgba(255, 255, 255, 0.15);
+        border-color: rgba(255, 255, 255, 0.25);
+
+        .userAvatarBtn__chevron {
+            transform: rotate(180deg);
+        }
+    }
+}
+
+.userDropdown {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    right: 0;
+    width: 240px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+    border: 1px solid #e8ecf1;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px) scale(0.95);
+    transform-origin: top right;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+    z-index: 10000;
+
+    &.open {
+        opacity: 1;
+        visibility: visible;
+        transform: translateY(0) scale(1);
+    }
+
+    &__header {
+        padding: 1rem;
+        background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+        border-bottom: 1px solid #e8ecf1;
+        display: flex;
+        flex-direction: column;
+        gap: 0.2rem;
+    }
+
+    &__name {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: #1e293b;
+    }
+
+    &__email {
+        font-family: 'Inter', sans-serif;
+        font-size: 0.75rem;
+        color: #64748b;
+    }
+
+    &__divider {
+        height: 1px;
+        background: #e8ecf1;
+        margin: 0;
+    }
+
+    &__item {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        padding: 0.75rem 1rem;
+        text-decoration: none;
+        color: #475569;
+        font-family: 'Inter', sans-serif;
+        font-size: 0.85rem;
+        font-weight: 500;
+        transition: all 0.2s ease;
+        cursor: pointer;
+
+        &:hover {
+            background: #f8fafc;
+            color: #2d74df;
+
+            i {
+                color: #2d74df;
+            }
+        }
+
+        i {
+            font-size: 0.9rem;
+            color: #64748b;
+            width: 18px;
+            text-align: center;
+            transition: color 0.2s ease;
+        }
+
+        &--logout {
+            color: #ef4444;
+
+            i {
+                color: #ef4444;
+            }
+
+            &:hover {
+                background: #fef2f2;
+                color: #dc2626;
+
+                i {
+                    color: #dc2626;
+                }
+            }
+        }
+    }
+
+    &__itemLeft {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+}
+
+// ==========================================
+// BENTO GRID
+// ==========================================
+.bentoGrid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(16, 1fr);
+    gap: 1.25rem;
+    height: 60rem;
+}
+
+// ==========================================
+// BENTO CARD
+// ==========================================
+.bentoCard {
+    position: relative;
+    background: transparent;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: none;
+    border-radius: 10px;
+    overflow: hidden;
+    text-decoration: none;
+    color: inherit;
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    isolation: isolate; // Creates stacking context
+
+    // Flashlight beam - rotating gradient (visible by default)
+    &::before {
+        content: '';
+        position: absolute;
+        inset: -100%;
+        background: conic-gradient(
+            from 0deg,
+            transparent 0deg,
+            transparent 300deg,
+            #4E2641 315deg,
+            #B67863 325deg,
+            $primary-blue 340deg,
+            #1E5BBF 350deg,
+            #6B3A5D 355deg,
+            transparent 360deg
+        );
+        animation: rotateBorder 8s linear infinite, beamPulse 4s ease-in-out infinite;
+        z-index: 1;
+    }
+
+
+    &:hover {
+        transform: translateY(-10px) scale(1.05);
+        box-shadow:
+            0 25px 50px rgba(0, 0, 0, 0.25),
+            0 0 30px rgba(45, 116, 223, 0.5),
+            0 0 60px rgba(78, 38, 65, 0.4);
+
+        .bentoCard__arrow {
+            opacity: 1;
+            transform: scale(1);
+            animation: meshGradient 3s ease infinite;
+
+            i {
+                transform: rotate(0deg);
+            }
+        }
+    }
+
+    // LEFT COLUMN: 2 equal cards
+    &--left-top {
+        grid-column: 1;
+        grid-row: 1 / 9; // Spans rows 1-8
+
+        &::before {
+            animation: rotateBorder 10s linear infinite, beamPulse 5s ease-in-out infinite;
+            animation-delay: 0s, 0s;
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &--left-bottom {
+        grid-column: 1;
+        grid-row: 9 / 17; // Spans rows 9-16
+
+        &::before {
+            animation: rotateBorder 12s linear infinite, beamPulse 6s ease-in-out infinite;
+            animation-delay: 0s, 1.5s;
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    // MIDDLE COLUMN: 3 cards (small, large, small)
+    &--middle-top {
+        grid-column: 2;
+        grid-row: 1 / 6; // Spans 5 rows (increased from 3)
+
+        &::before {
+            animation: rotateBorder 7s linear infinite, beamPulse 4s ease-in-out infinite;
+            animation-delay: 0s, 0.5s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+
+            img {
+                object-position: center 35%;
+            }
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &--middle-center {
+        grid-column: 2;
+        grid-row: 6 / 12; // Spans 6 rows (large card)
+
+        &::before {
+            animation: rotateBorder 9s linear infinite, beamPulse 5s ease-in-out infinite;
+            animation-delay: 0s, 2s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &--middle-bottom {
+        grid-column: 2;
+        grid-row: 12 / 17; // Spans 5 rows (increased from 3)
+
+        &::before {
+            animation: rotateBorder 11s linear infinite, beamPulse 6s ease-in-out infinite;
+            animation-delay: 0s, 3s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    // RIGHT COLUMN: 3 cards (large, small, large)
+    &--right-top {
+        grid-column: 3;
+        grid-row: 1 / 7; // Spans 6 rows (large)
+
+        &::before {
+            animation: rotateBorder 6s linear infinite, beamPulse 4s ease-in-out infinite;
+            animation-delay: 0s, 1s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+
+            img {
+                object-position: center 40%;
+            }
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &--right-center {
+        grid-column: 3;
+        grid-row: 7 / 11; // Spans 4 rows (small)
+
+        &::before {
+            animation: rotateBorder 14s linear infinite, beamPulse 7s ease-in-out infinite;
+            animation-delay: 0s, 2.5s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+
+            img {
+                object-position: center 45%;
+            }
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &--right-bottom {
+        grid-column: 3;
+        grid-row: 11 / 17; // Spans 6 rows (large - same as top)
+
+        &::before {
+            animation: rotateBorder 13s linear infinite, beamPulse 5s ease-in-out infinite;
+            animation-delay: 0s, 3.5s;
+        }
+
+        .bentoCard__imageContainer {
+            height: 65%;
+        }
+
+        .bentoCard__textContainer p {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+    }
+
+    &__imageContainer {
+        display: block;
+        width: calc(100% - 4px);
+        height: calc(50% - 2px);
+        margin: 2px 2px 0 2px;
+        overflow: hidden;
+        position: relative;
+        z-index: 3;
+        border-radius: 8px 8px 0 0;
+
+        &::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100%;
+            background: linear-gradient(to top, #090E21 0%, transparent 100%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 1;
+        }
+    }
+
+    &__textContainer {
+        padding: 1.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        flex: 1;
+        width: calc(100% - 4px);
+        margin: 0 2px 2px 2px;
+        background: #090E21;
+        position: relative;
+        z-index: 3;
+        border-radius: 0 0 8px 8px;
+        h2 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1E5BBF;
+            margin-bottom: 0.5rem;
+        }
+
+        p {
+            font-size: 0.875rem;
+            color: $dark-text-secondary;
+            line-height: 1.4;
+        }
+    }
+
+    &__arrow {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        background:
+            radial-gradient(circle at 30% 30%, #4E2641 0%, transparent 50%),
+            radial-gradient(circle at 70% 70%, $primary-blue 0%, transparent 50%),
+            radial-gradient(circle at 70% 30%, #6B3A5D 0%, transparent 50%),
+            radial-gradient(circle at 30% 70%, #1E5BBF 0%, transparent 50%),
+            linear-gradient(135deg, #4E2641 0%, $primary-blue 100%);
+        background-size: 200% 200%, 200% 200%, 200% 200%, 200% 200%, 100% 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: $white;
+        font-size: 1rem;
+        transition: all 0.3s ease;
+        opacity: 0;
+        transform: scale(0.8);
+
+        i {
+            transform: rotate(30deg);
+            transition: transform 0.3s ease;
+        }
+    }
+}
+
+@keyframes meshGradient {
+    0% {
+        background-position: 0% 0%, 100% 100%, 100% 0%, 0% 100%, center;
+    }
+    25% {
+        background-position: 100% 0%, 0% 100%, 0% 0%, 100% 100%, center;
+    }
+    50% {
+        background-position: 100% 100%, 0% 0%, 0% 100%, 100% 0%, center;
+    }
+    75% {
+        background-position: 0% 100%, 100% 0%, 100% 100%, 0% 0%, center;
+    }
+    100% {
+        background-position: 0% 0%, 100% 100%, 100% 0%, 0% 100%, center;
+    }
+}
+
+@keyframes rotateBorder {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes beamPulse {
+    0%, 100% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
+
+// ==========================================
+// RESPONSIVE DESIGN
+// ==========================================
+@media (max-width: 1024px) {
+    .landingContainer {
+        padding: 1.5rem;
+    }
+
+    .landingHeader {
+        &__logo {
+            width: 60px;
+            height: 60px;
+        }
+
+        &__text h1 {
+            font-size: 1.5rem;
+        }
+    }
+
+    .bentoGrid {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto;
+        min-height: auto;
+    }
+
+    .bentoCard {
+        &--left-top,
+        &--left-bottom,
+        &--middle-top,
+        &--middle-center,
+        &--middle-bottom,
+        &--right-top,
+        &--right-center,
+        &--right-bottom {
+            grid-column: 1;
+            grid-row: auto;
+            min-height: 200px;
+        }
+    }
+}
+
+@media (max-width: 640px) {
+    .landingContainer {
+        padding: 1rem;
+    }
+
+    .landingHeader {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+        margin-bottom: 2rem;
+
+        &__text h1 {
+            font-size: 1.25rem;
+        }
+
+        &__text p {
+            font-size: 0.85rem;
+        }
+    }
+
+    .bentoGrid {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+
+    .bentoCard {
+        min-height: 180px;
+
+        &__textContainer h2 {
+            font-size: 1rem;
+        }
+
+        &__textContainer p {
+            font-size: 0.8rem;
+        }
+    }
+}
+
+// ==========================================
+// DARK MODE STYLES
+// ==========================================
+body.dark-mode {
+    background: $dark-bg-primary;
+    color: $dark-text-primary;
+
+    .backgroundOverlay {
+        display: none; // Removed background image
+    }
+
+    .landingHeader {
+        &__logo {
+            background: $white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+
+        &__text {
+            h1 {
+                color: $dark-text-primary;
+            }
+
+            p {
+                color: $dark-text-secondary;
+            }
+        }
+    }
+
+    .userDropdown {
+        background: $dark-bg-secondary;
+        border-color: $dark-border;
+
+        &__header {
+            background: linear-gradient(135deg, rgba($dark-bg-tertiary, 0.8) 0%, rgba($dark-bg-tertiary, 0.6) 100%);
+            border-bottom-color: $dark-border;
+        }
+
+        &__name {
+            color: $dark-text-primary;
+        }
+
+        &__email {
+            color: $dark-text-secondary;
+        }
+
+        &__divider {
+            background: $dark-border;
+        }
+
+        &__item {
+            color: $dark-text-secondary;
+
+            &:hover {
+                background: rgba($dark-bg-tertiary, 0.5);
+                color: $secondary-blue;
+
+                i {
+                    color: $secondary-blue;
+                }
+            }
+
+            i {
+                color: $dark-text-secondary;
+            }
+
+            &--logout {
+                color: #ef4444;
+
+                i {
+                    color: #ef4444;
+                }
+
+                &:hover {
+                    background: rgba(#ef4444, 0.1);
+                    color: #f87171;
+
+                    i {
+                        color: #f87171;
+                    }
+                }
+            }
+        }
+    }
+
+    .bentoCard {
+        background: #090E21;
+        border-color: $dark-border;
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+
+        &:hover {
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border-color: $primary-blue;
+        }
+
+        &__imageContainer img {
+            opacity: 1;
+            filter: brightness(0.8);
+        }
+
+        &__textContainer {
+            background: #090E21;
+
+            h2 {
+                color: $dark-text-primary;
+            }
+
+            p {
+                color: $dark-text-secondary;
+            }
+        }
+    }
+}
+
+
+// ==========================================
+// REDUCED MOTION
+// ==========================================
+@media (prefers-reduced-motion: reduce) {
+    .bentoCard,
+    .bentoCard__imageContainer img {
+        transition: none;
+    }
+}
+
+// ==========================================
+// TOUCH DEVICE ENHANCEMENTS
+// ==========================================
+@media (hover: none) and (pointer: coarse) {
+    .bentoCard:hover {
+        transform: none;
+    }
+
+    .bentoCard:active {
+        transform: scale(0.98);
+    }
+}

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POTRAZ | Telecom GIS Portal</title>
+    <link rel="stylesheet" href="landing.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,100..900&display=swap" rel="stylesheet">
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+</head>
+<body class="dark-mode">
+    <!-- Circle Loader -->
+    <div class="loaderWrapper">
+        <div class="circleLoader">
+            <div class="circle"></div>
+            <div class="circle"></div>
+            <div class="circle"></div>
+        </div>
+    </div>
+
+    <!-- Background -->
+    <div class="backgroundOverlay"></div>
+
+    <!-- Main Container -->
+    <div class="landingContainer">
+        <!-- Header -->
+        <header class="landingHeader">
+            <div class="landingHeader__left">
+                <div class="landingHeader__logo">
+                    <img src="../login/assets/potraz-logo.png" alt="POTRAZ">
+                </div>
+                <div class="landingHeader__text">
+                    <h1>POTRAZ Portal</h1>
+                    <p>Telecommunications Regulatory Authority of Zimbabwe</p>
+                </div>
+            </div>
+
+            <!-- User Avatar Dropdown -->
+            <div class="userAvatarContainer">
+                <button class="userAvatarBtn" type="button">
+                    <span class="userAvatarBtn__avatar">
+                        <span class="userAvatarBtn__initials">JD</span>
+                    </span>
+                    <span class="userAvatarBtn__info">
+                        <span class="userAvatarBtn__name">John Doe</span>
+                        <span class="userAvatarBtn__role">Administrator</span>
+                    </span>
+                    <i class="fas fa-chevron-down userAvatarBtn__chevron"></i>
+                </button>
+                <div class="userDropdown">
+                    <div class="userDropdown__header">
+                        <span class="userDropdown__name">John Doe</span>
+                        <span class="userDropdown__email">john.doe@potraz.gov.zw</span>
+                    </div>
+                    <div class="userDropdown__divider"></div>
+                    <a href="../GIS/index.html" class="userDropdown__item">
+                        <i class="fas fa-globe"></i>
+                        <span>GIS Module</span>
+                    </a>
+                    <a href="#" class="userDropdown__item">
+                        <i class="fas fa-cog"></i>
+                        <span>Settings</span>
+                    </a>
+                    <div class="userDropdown__divider"></div>
+                    <a href="#" class="userDropdown__item userDropdown__item--logout">
+                        <i class="fas fa-sign-out-alt"></i>
+                        <span>Logout</span>
+                    </a>
+                </div>
+            </div>
+        </header>
+
+        <!-- Bento Grid -->
+        <main class="bentoGrid">
+            <!-- LEFT COLUMN: 2 equal cards -->
+            <a href="../GIS/index.html" class="bentoCard bentoCard--left-top">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/GIS Module.png" alt="GIS Module">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>GIS Module</h2>
+                    <p>Interactive mapping platform for visualizing telecommunications infrastructure, network coverage, and spatial data across Zimbabwe with advanced geospatial analysis tools</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="bentoCard bentoCard--left-bottom">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/Dashboard.png" alt="Dashboard">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>Dashboard</h2>
+                    <p>Comprehensive analytics and insights across telecommunications sectors with real-time data visualization, performance metrics, and regulatory compliance monitoring</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- MIDDLE COLUMN: 3 cards (small, large, small) -->
+            <a href="#" class="bentoCard bentoCard--middle-top">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/Operator Data Editor.png" alt="Operator Data Editor">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>Operator Data Editor</h2>
+                    <p>Streamlined platform for managing and editing telecommunications network data with intuitive tools and validation</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="bentoCard bentoCard--middle-center">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/User Management.png" alt="User Management">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>User Management</h2>
+                    <p>Comprehensive user administration system for managing accounts, roles, permissions and access control</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="bentoCard bentoCard--middle-bottom">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/User Guide.png" alt="User Guide">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>User Guide</h2>
+                    <p>Detailed documentation and step-by-step instructions for seamless navigation and effective system utilization</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <!-- RIGHT COLUMN: 3 cards (large, small, large) -->
+            <a href="#" class="bentoCard bentoCard--right-top">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/Online Data Collection (ODC).png" alt="Online Data Collection">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>Online Data Collection (ODC)</h2>
+                    <p>Streamlined digital platform for efficient telecommunications data gathering and submission from network operators</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="https://potraz.gov.zw" target="_blank" rel="noopener noreferrer" class="bentoCard bentoCard--right-center">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/Potraz Website.png" alt="Potraz Website">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>Potraz Website</h2>
+                    <p>Official portal of the Postal and Telecommunications Regulatory Authority of Zimbabwe for industry information</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+
+            <a href="#" class="bentoCard bentoCard--right-bottom">
+                <span class="bentoCard__imageContainer">
+                    <img src="../GIS/assets/bentoImages/Executive Electronic Dashboards.png" alt="Executive Electronic Dashboards">
+                </span>
+                <div class="bentoCard__textContainer">
+                    <h2>Executive Electronic Dashboards</h2>
+                    <p>High-level performance analytics and strategic insights for executive decision-making and sector oversight</p>
+                    <div class="bentoCard__arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                    </div>
+                </div>
+            </a>
+        </main>
+    </div>
+
+    <script src="landing.js"></script>
+</body>
+</html>
