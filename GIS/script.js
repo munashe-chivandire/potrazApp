@@ -892,3 +892,497 @@ if (layersContent) {
         });
     });
 }
+
+// ==========================================
+// FILTER DROPDOWN FUNCTIONALITY
+// ==========================================
+
+const filterDropdownTrigger = document.querySelector('.filterDropdownTrigger');
+const filterDropdownMenu = document.querySelector('.filterDropdownMenu');
+const filterDropdownContainer = document.querySelector('.filterDropdownContainer');
+const filterOptions = document.querySelectorAll('.filterDropdownMenu__option');
+
+let isFilterDropdownOpen = false;
+
+const closeFilterDropdown = () => {
+    isFilterDropdownOpen = false;
+    filterDropdownTrigger.classList.remove('active');
+    filterDropdownMenu.classList.remove('open');
+};
+
+const openFilterDropdown = () => {
+    isFilterDropdownOpen = true;
+    filterDropdownTrigger.classList.add('active');
+    filterDropdownMenu.classList.add('open');
+};
+
+if (filterDropdownTrigger) {
+    filterDropdownTrigger.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        if (isFilterDropdownOpen) {
+            closeFilterDropdown();
+        } else {
+            openFilterDropdown();
+        }
+    });
+}
+
+// Close dropdown when clicking outside
+document.addEventListener('click', (e) => {
+    if (isFilterDropdownOpen && !filterDropdownContainer.contains(e.target)) {
+        closeFilterDropdown();
+    }
+});
+
+// Handle checkbox selection (only one at a time)
+const filterCheckboxes = document.querySelectorAll('.filterDropdownMenu__option input[type="checkbox"]');
+
+filterCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener('change', function() {
+        if (this.checked) {
+            // Uncheck all other checkboxes
+            filterCheckboxes.forEach(cb => {
+                if (cb !== this) {
+                    cb.checked = false;
+                }
+            });
+        }
+    });
+});
+
+// ==========================================
+// TOOLS EXPANDABLE CONTAINER ANIMATION
+// ==========================================
+
+const toolsExpandableContainer = document.querySelector('.toolsExpandableContainer');
+const toolsExpandableButtons = document.querySelectorAll('.toolExpandable');
+
+// Set initial state - hidden and offset
+gsap.set(toolsExpandableContainer, {
+    opacity: 0,
+    x: -30
+});
+
+gsap.set(toolsExpandableButtons, {
+    opacity: 0,
+    x: -20,
+    scale: 0.8
+});
+
+// Entrance animation on page load with smooth stagger
+const animateToolsExpandableIn = () => {
+    // First animate the container
+    gsap.to(toolsExpandableContainer, {
+        opacity: 1,
+        x: 0,
+        duration: 0.4,
+        ease: 'power3.out',
+        onComplete: () => {
+            // Then stagger animate each button
+            gsap.to(toolsExpandableButtons, {
+                opacity: 1,
+                x: 0,
+                scale: 1,
+                duration: 0.5,
+                stagger: {
+                    each: 0.06,
+                    from: 'start',
+                    ease: 'power2.out'
+                },
+                ease: 'back.out(1.4)'
+            });
+        }
+    });
+};
+
+// Animate out function (for potential toggle functionality)
+const animateToolsExpandableOut = () => {
+    return new Promise((resolve) => {
+        // First animate buttons out with reverse stagger
+        gsap.to(toolsExpandableButtons, {
+            opacity: 0,
+            x: -20,
+            scale: 0.8,
+            duration: 0.3,
+            stagger: {
+                each: 0.04,
+                from: 'end',
+                ease: 'power2.in'
+            },
+            ease: 'power2.in',
+            onComplete: () => {
+                // Then animate container out
+                gsap.to(toolsExpandableContainer, {
+                    opacity: 0,
+                    x: -30,
+                    duration: 0.3,
+                    ease: 'power2.in',
+                    onComplete: resolve
+                });
+            }
+        });
+    });
+};
+
+// Trigger entrance animation after a short delay for page load
+setTimeout(animateToolsExpandableIn, 300);
+
+// ==========================================
+// TOOLS OPTIONS PANEL FUNCTIONALITY
+// ==========================================
+
+const toolsOptionsPanel = document.querySelector('.toolsOptionsPanel');
+
+let isPanelOpen = false;
+let activeTool = null;
+
+// Tool options data structure
+const toolOptions = {
+    'area-profiling': {
+        title: 'Area Profiling',
+        options: [
+            { text: 'Draw Area', action: 'draw-area' },
+            { text: 'Select Predefined Area', action: 'select-predefined-area' },
+            { text: 'Calculate Coverage', action: 'calculate-coverage' },
+            { text: 'Generate Report', action: 'generate-report' }
+        ]
+    },
+    'terrain-profiling': {
+        title: 'Terrain Profiling',
+        options: [
+            { text: 'Elevation Profile', action: 'elevation-profile' },
+            { text: 'Slope Analysis', action: 'slope-analysis' },
+            { text: 'Viewshed Analysis', action: 'viewshed-analysis' },
+            { text: 'Line of Sight', action: 'line-of-sight' }
+        ]
+    },
+    'proximity-profiling': {
+        title: 'Proximity Profiling',
+        options: [
+            { text: 'Buffer Analysis', action: 'buffer-analysis' },
+            { text: 'Nearest Neighbor', action: 'nearest-neighbor' },
+            { text: 'Distance Calculation', action: 'distance-calculation' },
+            { text: 'Service Area', action: 'service-area' }
+        ]
+    },
+    'cell-radius': {
+        title: 'Cell Radius',
+        options: [
+            { text: 'Display Cell Coverage', action: 'display-cell-coverage' },
+            { text: 'Adjust Radius', action: 'adjust-radius' },
+            { text: 'Show Signal Strength', action: 'show-signal-strength' },
+            { text: 'Coverage Statistics', action: 'coverage-statistics' }
+        ]
+    },
+    'map-masking': {
+        title: 'Map Masking',
+        options: [
+            { text: 'Create Mask', action: 'create-mask' },
+            { text: 'Edit Mask', action: 'edit-mask' },
+            { text: 'Apply Mask', action: 'apply-mask' },
+            { text: 'Remove Mask', action: 'remove-mask' }
+        ]
+    },
+    'map-statistics': {
+        title: 'Map Statistics',
+        options: [
+            { text: 'View Statistics', action: 'view-statistics' },
+            { text: 'Export Statistics', action: 'export-statistics' },
+            { text: 'Generate Charts', action: 'generate-charts' },
+            { text: 'Compare Layers', action: 'compare-layers' }
+        ]
+    },
+    'measuring-tools': {
+        title: 'Measuring Tools',
+        options: [
+            { text: 'Measure Distance', action: 'measure-distance' },
+            { text: 'Measure Area', action: 'measure-area' },
+            { text: 'Measure Perimeter', action: 'measure-perimeter' },
+            { text: 'Coordinate Finder', action: 'coordinate-finder' }
+        ]
+    },
+    'select-features': {
+        title: 'Select Features',
+        options: [
+            { text: 'Select by Click', action: 'select-by-click' },
+            { text: 'Select by Rectangle', action: 'select-by-rectangle' },
+            { text: 'Select by Polygon', action: 'select-by-polygon' },
+            { text: 'Select by Attribute', action: 'select-by-attribute' }
+        ]
+    },
+    'identify-features': {
+        title: 'Identify Features',
+        options: [
+            { text: 'Identify at Point', action: 'identify-at-point' },
+            { text: 'Show Attributes', action: 'show-attributes' },
+            { text: 'Feature Details', action: 'feature-details' },
+            { text: 'Export Info', action: 'export-info' }
+        ]
+    },
+    'layer-opacity': {
+        title: 'Layer Opacity',
+        options: [
+            { text: 'Adjust All Layers', action: 'adjust-all-layers' },
+            { text: 'Individual Layer Control', action: 'individual-layer-control' },
+            { text: 'Reset to Default', action: 'reset-to-default' },
+            { text: 'Save Preset', action: 'save-preset' }
+        ]
+    },
+    'download-map': {
+        title: 'Download Map',
+        options: [
+            { text: 'Download as PNG', action: 'download-png' },
+            { text: 'Download as PDF', action: 'download-pdf' },
+            { text: 'Download as SVG', action: 'download-svg' },
+            { text: 'Download Data', action: 'download-data' }
+        ]
+    }
+};
+
+// Function to get tool type from button
+const getToolType = (button) => {
+    const tooltip = button.getAttribute('uk-tooltip');
+    if (tooltip.includes('Area Profiling')) return 'area-profiling';
+    if (tooltip.includes('Terrain Profiling')) return 'terrain-profiling';
+    if (tooltip.includes('Proximity Profiling')) return 'proximity-profiling';
+    if (tooltip.includes('Cell Radius')) return 'cell-radius';
+    if (tooltip.includes('Map Masking')) return 'map-masking';
+    if (tooltip.includes('Map Statistics')) return 'map-statistics';
+    if (tooltip.includes('Measuring Tools')) return 'measuring-tools';
+    if (tooltip.includes('Select Features')) return 'select-features';
+    if (tooltip.includes('Identify Features')) return 'identify-features';
+    if (tooltip.includes('Layer Opacity')) return 'layer-opacity';
+    if (tooltip.includes('Download Map')) return 'download-map';
+    return null;
+};
+
+// Function to render panel content
+const renderPanelContent = (toolType) => {
+    const panelContent = toolsOptionsPanel.querySelector('.toolsOptionsPanel__content');
+    const tool = toolOptions[toolType];
+
+    if (!tool) return;
+
+    const optionsHTML = tool.options.map(option => `
+        <button class="toolOptionBtn" data-action="${option.action}">
+            <span class="toolOptionBtn__text">${option.text}</span>
+            <i class="fas fa-chevron-right toolOptionBtn__icon"></i>
+        </button>
+    `).join('');
+
+    panelContent.innerHTML = optionsHTML;
+
+    // Add click handlers to option buttons
+    const optionButtons = panelContent.querySelectorAll('.toolOptionBtn');
+    optionButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            const action = btn.getAttribute('data-action');
+            console.log(`Action triggered: ${action}`);
+            // Handle action here (can be expanded later)
+
+            // Close panel after clicking an option
+            closePanel();
+        });
+    });
+};
+
+// Function to close panel
+const closePanel = () => {
+    if (!isPanelOpen) return;
+
+    isPanelOpen = false;
+    activeTool = null;
+
+    // Remove active state from all tool buttons
+    toolsExpandableButtons.forEach(btn => btn.classList.remove('activeBtn'));
+
+    // Get elements for animation
+    const panelContent = toolsOptionsPanel.querySelector('.toolsOptionsPanel__content');
+    const optionButtons = toolsOptionsPanel.querySelectorAll('.toolOptionBtn');
+    gsap.killTweensOf([toolsOptionsPanel, panelContent, optionButtons]);
+
+    // Create a timeline for smooth sequential animation
+    const tl = gsap.timeline({
+        onComplete: () => {
+            toolsOptionsPanel.classList.remove('open');
+        }
+    });
+
+    // Animate buttons out with smooth stagger
+    tl.to(optionButtons, {
+        opacity: 0,
+        x: -30,
+        scale: 0.95,
+        duration: 0.25,
+        stagger: {
+            each: 0.04,
+            from: "end"
+        },
+        ease: 'power2.inOut'
+    });
+
+    // Animate content and panel out together
+    tl.to(panelContent, {
+        opacity: 0,
+        duration: 0.2,
+        ease: 'power2.inOut'
+    }, '-=0.15');
+
+    tl.to(toolsOptionsPanel, {
+        opacity: 0,
+        x: -40,
+        scale: 0.98,
+        duration: 0.3,
+        ease: 'power3.inOut'
+    }, '-=0.2');
+};
+
+// Function to open panel
+const openPanel = (toolType, clickedButton) => {
+    // Render content
+    renderPanelContent(toolType);
+
+    // Set panel to visible for measurement
+    toolsOptionsPanel.classList.add('open');
+
+    // Get elements for animation
+    const panelContent = toolsOptionsPanel.querySelector('.toolsOptionsPanel__content');
+    const optionButtons = toolsOptionsPanel.querySelectorAll('.toolOptionBtn');
+
+    // Kill any ongoing tweens
+    gsap.killTweensOf([toolsOptionsPanel, panelContent, optionButtons]);
+
+    // Set initial state
+    gsap.set(toolsOptionsPanel, { opacity: 0, x: -40, scale: 0.98 });
+    gsap.set(panelContent, { opacity: 0 });
+    gsap.set(optionButtons, { opacity: 0, x: -25, y: 8, scale: 0.9 });
+
+    // Create timeline for smooth coordinated animation
+    const tl = gsap.timeline();
+
+    // Animate panel in first
+    tl.to(toolsOptionsPanel, {
+        opacity: 1,
+        x: 0,
+        scale: 1,
+        duration: 0.4,
+        ease: 'power3.out'
+    });
+
+    // Animate content opacity
+    tl.to(panelContent, {
+        opacity: 1,
+        duration: 0.3,
+        ease: 'power2.out'
+    }, '-=0.3');
+
+    // Animate option buttons in with smooth stagger (overlapping with panel)
+    tl.to(optionButtons, {
+        opacity: 1,
+        x: 0,
+        y: 0,
+        scale: 1,
+        duration: 0.45,
+        stagger: {
+            each: 0.07,
+            from: "start",
+            ease: 'power1.out'
+        },
+        ease: 'back.out(1.2)'
+    }, '-=0.25');
+
+    isPanelOpen = true;
+    activeTool = toolType;
+
+    // Add active state to clicked button
+    clickedButton.classList.add('activeBtn');
+};
+
+// Function to switch panel content
+const switchPanel = (toolType, clickedButton) => {
+    // Get elements for animation
+    const panelContent = toolsOptionsPanel.querySelector('.toolsOptionsPanel__content');
+    const currentButtons = toolsOptionsPanel.querySelectorAll('.toolOptionBtn');
+
+    gsap.killTweensOf([panelContent, currentButtons]);
+
+    // Create timeline for smooth transition
+    const tl = gsap.timeline({
+        onComplete: () => {
+            // Remove active state from all buttons
+            toolsExpandableButtons.forEach(btn => btn.classList.remove('activeBtn'));
+
+            // Render new content
+            renderPanelContent(toolType);
+
+            // Get new elements
+            const newPanelContent = toolsOptionsPanel.querySelector('.toolsOptionsPanel__content');
+            const newButtons = toolsOptionsPanel.querySelectorAll('.toolOptionBtn');
+
+            gsap.set(newPanelContent, { opacity: 1 });
+            gsap.set(newButtons, { opacity: 0, x: -25, y: 8, scale: 0.9 });
+
+            gsap.to(newButtons, {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration: 0.45,
+                stagger: {
+                    each: 0.07,
+                    from: "start",
+                    ease: 'power1.out'
+                },
+                ease: 'back.out(1.2)'
+            });
+
+            activeTool = toolType;
+            clickedButton.classList.add('activeBtn');
+        }
+    });
+
+    // Animate current buttons out smoothly
+    tl.to(currentButtons, {
+        opacity: 0,
+        x: -20,
+        scale: 0.95,
+        duration: 0.2,
+        stagger: {
+            each: 0.03,
+            from: "end"
+        },
+        ease: 'power2.inOut'
+    });
+};
+
+// Add click handlers to tool buttons
+toolsExpandableButtons.forEach(button => {
+    button.addEventListener('click', (e) => {
+        e.stopPropagation();
+
+        const toolType = getToolType(button);
+        if (!toolType) return;
+
+        if (isPanelOpen && activeTool === toolType) {
+            // Close panel if clicking the same tool
+            closePanel();
+        } else if (isPanelOpen && activeTool !== toolType) {
+            // Switch to new tool content
+            switchPanel(toolType, button);
+        } else {
+            // Open panel with new content
+            openPanel(toolType, button);
+        }
+    });
+});
+
+// Close panel when clicking outside
+document.addEventListener('click', (e) => {
+    if (isPanelOpen &&
+        !toolsOptionsPanel.contains(e.target) &&
+        !toolsExpandableContainer.contains(e.target)) {
+        closePanel();
+    }
+});
