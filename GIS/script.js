@@ -952,48 +952,202 @@ filterCheckboxes.forEach(checkbox => {
 });
 
 // ==========================================
+// LOADER ANIMATION
+// ==========================================
+const loader = document.querySelector('.loaderWrapper');
+const circleLoader = document.querySelector('.circleLoader');
+const circles = document.querySelectorAll('.circleLoader .circle');
+
+// Spinning loader animation
+if (circleLoader) {
+    gsap.to(circleLoader, {
+        rotation: 360,
+        duration: 1,
+        repeat: -1,
+        ease: "linear"
+    });
+
+    // Pulsing circles animation
+    gsap.to(circles, {
+        scale: 1.3,
+        opacity: 0.7,
+        duration: 0.5,
+        stagger: {
+            each: 0.15,
+            repeat: -1,
+            yoyo: true
+        },
+        ease: "power1.inOut"
+    });
+}
+
+// ==========================================
+// UI ELEMENTS FOR ENTRY ANIMATIONS
+// ==========================================
+const topSearchContainer = document.querySelector('.topSearchContainer');
+const dashboardTabs = document.querySelectorAll('.topSwitcherDashboards li');
+const dashboardPanels = document.querySelectorAll('.dashboardWrapperSwitcher, .mapLayersWrapperSwitcher, .mapLegendsWrapperSwitcher');
+const kpiCards = document.querySelectorAll('.kpiCard');
+const chartSections = document.querySelectorAll('.chartSection');
+
+gsap.set([topSearchContainer, dashboardWrapper, dashboardTabs, dashboardPanels, baseMapsContainer, kpiCards, chartSections], { opacity: 0 });
+
+// ==========================================
+// UI ELEMENTS ENTRY ANIMATIONS
+// ==========================================
+const animateTopSearchIn = () => {
+    gsap.fromTo(topSearchContainer,
+        { opacity: 0, y: -30 },
+        { opacity: 1, y: 0, duration: 0.5, ease: 'power3.out' }
+    );
+};
+
+const animateDashboardIn = () => {
+    gsap.fromTo(dashboardWrapper,
+        { opacity: 0, x: 50 },
+        {
+            opacity: 1,
+            x: 0,
+            duration: 0.5,
+            ease: 'power3.out',
+            onComplete: () => {
+                gsap.fromTo(dashboardTabs,
+                    { opacity: 0, y: -15, scale: 0.9 },
+                    {
+                        opacity: 1,
+                        y: 0,
+                        scale: 1,
+                        duration: 0.4,
+                        stagger: { each: 0.08, from: 'start' },
+                        ease: 'back.out(1.4)'
+                    }
+                );
+
+                gsap.fromTo(dashboardPanels,
+                    { opacity: 0 },
+                    {
+                        opacity: 1,
+                        duration: 0.3,
+                        delay: 0.2,
+                        ease: 'power2.out',
+                        onComplete: () => {
+                            gsap.fromTo(kpiCards,
+                                { opacity: 0, y: 20, scale: 0.9 },
+                                {
+                                    opacity: 1,
+                                    y: 0,
+                                    scale: 1,
+                                    duration: 0.5,
+                                    stagger: { each: 0.1, from: 'start' },
+                                    ease: 'back.out(1.2)'
+                                }
+                            );
+
+                            gsap.fromTo(chartSections,
+                                { opacity: 0, y: 30, scale: 0.95 },
+                                {
+                                    opacity: 1,
+                                    y: 0,
+                                    scale: 1,
+                                    duration: 0.6,
+                                    stagger: { each: 0.15, from: 'start' },
+                                    delay: 0.3,
+                                    ease: 'power3.out'
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+        }
+    );
+};
+
+const animateBaseMapsIn = () => {
+    gsap.fromTo(baseMapsContainer,
+        { opacity: 0, y: 30 },
+        { opacity: 1, y: 0, duration: 0.5, ease: 'back.out(1.4)' }
+    );
+};
+
+// ==========================================
+// TOOLS CONTAINER ANIMATION (Main tools - zoom, pan, etc.)
+// ==========================================
+
+const toolsContainer = document.querySelector('.toolsContainer');
+const toolsContainerButtons = document.querySelectorAll('.toolsContainer > a');
+
+gsap.set([toolsContainer, toolsContainerButtons], { opacity: 0 });
+
+const animateToolsContainerIn = () => {
+    // First animate the container
+    gsap.fromTo(toolsContainer,
+        { opacity: 0, x: -30 },
+        {
+            opacity: 1,
+            x: 0,
+            duration: 0.4,
+            ease: 'power3.out',
+            onComplete: () => {
+                // Then stagger animate each button
+                gsap.fromTo(toolsContainerButtons,
+                    { opacity: 0, x: -20, scale: 0.8 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        scale: 1,
+                        duration: 0.5,
+                        stagger: {
+                            each: 0.06,
+                            from: 'start',
+                            ease: 'power2.out'
+                        },
+                        ease: 'back.out(1.4)'
+                    }
+                );
+            }
+        }
+    );
+};
+
+// ==========================================
 // TOOLS EXPANDABLE CONTAINER ANIMATION
 // ==========================================
 
 const toolsExpandableContainer = document.querySelector('.toolsExpandableContainer');
 const toolsExpandableButtons = document.querySelectorAll('.toolExpandable');
 
-// Set initial state - hidden and offset
-gsap.set(toolsExpandableContainer, {
-    opacity: 0,
-    x: -30
-});
+gsap.set([toolsExpandableContainer, toolsExpandableButtons], { opacity: 0 });
 
-gsap.set(toolsExpandableButtons, {
-    opacity: 0,
-    x: -20,
-    scale: 0.8
-});
-
-// Entrance animation on page load with smooth stagger
 const animateToolsExpandableIn = () => {
     // First animate the container
-    gsap.to(toolsExpandableContainer, {
-        opacity: 1,
-        x: 0,
-        duration: 0.4,
-        ease: 'power3.out',
-        onComplete: () => {
-            // Then stagger animate each button
-            gsap.to(toolsExpandableButtons, {
-                opacity: 1,
-                x: 0,
-                scale: 1,
-                duration: 0.5,
-                stagger: {
-                    each: 0.06,
-                    from: 'start',
-                    ease: 'power2.out'
-                },
-                ease: 'back.out(1.4)'
-            });
+    gsap.fromTo(toolsExpandableContainer,
+        { opacity: 0, x: -30 },
+        {
+            opacity: 1,
+            x: 0,
+            duration: 0.4,
+            ease: 'power3.out',
+            onComplete: () => {
+                // Then stagger animate each button
+                gsap.fromTo(toolsExpandableButtons,
+                    { opacity: 0, x: -20, scale: 0.8 },
+                    {
+                        opacity: 1,
+                        x: 0,
+                        scale: 1,
+                        duration: 0.5,
+                        stagger: {
+                            each: 0.06,
+                            from: 'start',
+                            ease: 'power2.out'
+                        },
+                        ease: 'back.out(1.4)'
+                    }
+                );
+            }
         }
-    });
+    );
 };
 
 // Animate out function (for potential toggle functionality)
@@ -1025,8 +1179,34 @@ const animateToolsExpandableOut = () => {
     });
 };
 
-// Trigger entrance animation after a short delay for page load
-setTimeout(animateToolsExpandableIn, 300);
+// ==========================================
+// HIDE LOADER & TRIGGER ENTRY ANIMATIONS
+// ==========================================
+const hideLoaderAndAnimate = () => {
+    gsap.to(loader, {
+        opacity: 0,
+        duration: 0.5,
+        ease: 'power2.inOut',
+        onComplete: () => {
+            loader.style.display = 'none';
+
+            // Trigger all entry animations with staggered delays
+            // Top elements first
+            animateTopSearchIn();
+            animateDashboardIn();
+
+            // Left side tools (staggered)
+            setTimeout(animateToolsContainerIn, 100);
+            setTimeout(animateToolsExpandableIn, 400);
+
+            // Bottom elements
+            setTimeout(animateBaseMapsIn, 200);
+        }
+    });
+};
+
+// Start the sequence after page loads
+setTimeout(hideLoaderAndAnimate, 1500);
 
 // ==========================================
 // TOOLS OPTIONS PANEL FUNCTIONALITY

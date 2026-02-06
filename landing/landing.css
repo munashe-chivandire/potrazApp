@@ -489,6 +489,7 @@ body {
   font-size: 0.875rem;
   color: #8892a8;
   line-height: 1.4;
+  opacity: 0.5;
 }
 .bentoCard__arrow {
   position: absolute;
@@ -680,6 +681,7 @@ body.dark-mode .bentoCard__textContainer h2 {
 }
 body.dark-mode .bentoCard__textContainer p {
   color: #8892a8;
+  opacity: 0.5;
 }
 
 @media (prefers-reduced-motion: reduce) {
